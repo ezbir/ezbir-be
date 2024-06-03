@@ -34,10 +34,14 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorizedException("Email or password is wrong");
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = jwtTokenUtils.createToken(userDetails);
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+            String token = jwtTokenUtils.createToken(userDetails);
 
-        return new JwtResponseDto(userService.getUserResponseDtoByEmail(request.getEmail()), token);
+            return new JwtResponseDto(userService.getUserResponseDtoByEmail(request.getEmail()), token);
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     @Override
