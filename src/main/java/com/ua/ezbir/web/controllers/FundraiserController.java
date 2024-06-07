@@ -39,7 +39,7 @@ public class FundraiserController {
         return fundraiserService.addFundraiser(fundraiserRequestDto);
     }
 
-    @PostMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String deleteFundraiser(
             @PathVariable("id") Long id
     ) {

@@ -12,7 +12,6 @@ import com.ua.ezbir.services.UserService;
 import com.ua.ezbir.web.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,13 +94,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User getUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder
+        String userEmail = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getPrincipal();
+                .getName();
 
         return userRepository
-                .findByEmail(userDetails.getUsername())
+                .findByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
     }
 

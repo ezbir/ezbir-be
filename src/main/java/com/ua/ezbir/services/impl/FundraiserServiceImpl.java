@@ -33,6 +33,7 @@ public class FundraiserServiceImpl implements FundraiserService {
     @Transactional
     public FundraiserResponseDto addFundraiser(FundraiserRequestDto fundraiserRequestDto) {
         User user = userService.getUser();
+
         List<Fundraiser> fundraiserList = user.getFundraisers();
 
         Fundraiser fundraiser = Fundraiser.builder()
@@ -41,6 +42,7 @@ public class FundraiserServiceImpl implements FundraiserService {
                 .jarLink(fundraiserRequestDto.getJarLink())
                 .description(fundraiserRequestDto.getDescription())
                 .categories(fundraiserRequestDto.getCategories())
+                .user(user)
                 .build();
         fundraiserRepository.save(fundraiser);
 

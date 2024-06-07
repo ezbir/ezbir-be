@@ -28,6 +28,8 @@ public class FundraiserDtoFactory {
                                 .map(postDtoFactory::makePostResponseDto)
                                 .collect(Collectors.toList())
                 )
+                .username(fundraiser.getUser().getUsername())
+                .userId(fundraiser.getUser().getId())
                 .build();
     }
 }
