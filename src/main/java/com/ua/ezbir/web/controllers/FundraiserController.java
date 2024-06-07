@@ -25,7 +25,7 @@ public class FundraiserController {
         return fundraiserService.findFundraiserById(id);
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public List<FundraiserResponseDto> fetchFundraisers(
             @RequestParam("prefix_name") Optional<String> optionalPrefixName
             ) {
