@@ -24,6 +24,9 @@ public class VerificationToken {
     @Column(name = "expiry_date")
     private Instant expiryDate = Instant.now().plus(5, ChronoUnit.MINUTES);
 
-    @OneToOne
-    private User user;
+    private String email;
+
+    private String username;
+
+    private String password;
 }

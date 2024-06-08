@@ -21,11 +21,6 @@ public class UserController {
         return userService.fetchUsers(optionalPrefixName);
     }
 
-    @PostMapping("/verify")
-    public String verifyEmail(@RequestParam("token") String token) {
-        return userService.verifyEmail(token);
-    }
-
     @PatchMapping("/update")
     public UserResponseDto addInfo(
             @RequestParam(value = "description", required = false) Optional<String> optionalDescription,

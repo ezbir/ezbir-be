@@ -7,5 +7,6 @@ import com.ua.ezbir.web.user.UserResponseDto;
 
 public interface AuthService {
     JwtResponseDto createAuthToken(JwtRequestDto jwtRequestDto);
-    UserResponseDto createNewUser(UserRequestDto userRequestDto);
+    String registerNewUser(UserRequestDto userRequestDto);
+    UserResponseDto verifyEmail(String inputToken);
 }

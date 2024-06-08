@@ -21,7 +21,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserResponseDto register(@RequestBody @Valid UserRequestDto userRequestDto) {
-        return authService.createNewUser(userRequestDto);
+    public String register(@RequestBody @Valid UserRequestDto userRequestDto) {
+        return authService.registerNewUser(userRequestDto);
+    }
+
+    @PostMapping("/verify")
+    public UserResponseDto verifyEmail(@RequestParam("token") String token) {
+        return authService.verifyEmail(token);
     }
 }
