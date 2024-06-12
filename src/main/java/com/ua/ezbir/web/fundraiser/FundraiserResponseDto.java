@@ -15,6 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FundraiserResponseDto {
+    private String name;
+
     private Long id;
 
     private int amount;

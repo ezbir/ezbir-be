@@ -14,6 +14,7 @@ public class FundraiserDtoFactory {
 
     public FundraiserResponseDto makeFundraiserResponseDto(Fundraiser fundraiser) {
         return FundraiserResponseDto.builder()
+                .name(fundraiser.getName())
                 .id(fundraiser.getId())
                 .amount(fundraiser.getAmount())
                 .jarLink(fundraiser.getJarLink())

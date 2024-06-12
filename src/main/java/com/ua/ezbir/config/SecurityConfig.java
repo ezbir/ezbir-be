@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/user/update").authenticated()
                         .requestMatchers("/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/fundraisers").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/fundraisers/search").permitAll()
                         .requestMatchers("/api/fundraisers/**").authenticated()
                         .anyRequest().permitAll())
                 .cors(Customizer.withDefaults())
