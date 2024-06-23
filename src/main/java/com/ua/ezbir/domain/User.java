@@ -38,7 +38,6 @@ public class User {
     private Instant createdAt = Instant.now();
 
     @Builder.Default
-    @OneToMany
-    @JoinColumn(name = "fundraiser_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user")
     private List<Fundraiser> fundraisers = new ArrayList<>();
 }

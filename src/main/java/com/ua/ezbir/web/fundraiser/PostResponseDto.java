@@ -21,6 +21,6 @@ public class PostResponseDto {
     @JsonProperty("created_at")
     private Instant createdAt;
 
-    @JsonProperty("photos_url")
-    private List<String> photosUrl;
+    @JsonProperty("content_urls")
+    private List<String> contentUrls;
 }

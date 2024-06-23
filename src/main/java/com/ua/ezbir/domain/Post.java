@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,7 +28,9 @@ public class Post {
     @ManyToOne
     private Fundraiser fundraiser;
 
+    @Builder.Default
     @ElementCollection
-    @Column(name = "photos_url")
-    private List<String> photosUrl;
+    @CollectionTable(name = "post_content_urls", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "content_url")
+    private List<String> contentUrls = new ArrayList<>();
 }

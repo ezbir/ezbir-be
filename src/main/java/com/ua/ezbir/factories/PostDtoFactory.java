@@ -11,7 +11,7 @@ public class PostDtoFactory {
                 .id(post.getId())
                 .text(post.getText())
                 .createdAt(post.getCreatedAt())
-                .photosUrl(post.getPhotosUrl())
+                .contentUrls(post.getContentUrls())
                 .build();
     }
 }

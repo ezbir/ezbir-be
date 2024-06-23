@@ -39,16 +39,11 @@ public class Fundraiser {
     @ManyToOne
     private User user;
 
-    // Поле типу Set<Category> для зберігання множини категорій
-    @ElementCollection(targetClass = Category.class)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "fundraiser_category", joinColumns = @JoinColumn(name = "fundraiser_id"))
-    @Column(name = "category")
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private Set<Category> categories = new HashSet<>();
 
     @Builder.Default
-    @OneToMany
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "fundraiser")
     private List<Post> posts = new ArrayList<>();
 }
