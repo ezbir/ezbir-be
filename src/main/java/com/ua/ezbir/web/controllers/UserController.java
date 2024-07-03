@@ -4,6 +4,7 @@ import com.ua.ezbir.services.UserService;
 import com.ua.ezbir.web.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +34,10 @@ public class UserController {
     @GetMapping
     public UserResponseDto getUser(@RequestParam("id") Long id) {
         return userService.getUserResponseDtoById(id);
+    }
+
+    @PostMapping("/upload-picture")
+    public String uploadPicture(@RequestParam("picture") MultipartFile file) {
+        return userService.uploadPicture(file);
     }
 }

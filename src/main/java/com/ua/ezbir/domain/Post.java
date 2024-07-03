@@ -31,6 +31,6 @@ public class Post {
     @Builder.Default
     @ElementCollection
     @CollectionTable(name = "post_content_urls", joinColumns = @JoinColumn(name = "post_id"))
-    @Column(name = "content_url")
+    @Column(name = "content_urls")
     private List<String> contentUrls = new ArrayList<>();
 }

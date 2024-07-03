@@ -12,7 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserDtoFactory userDtoFactory;
     private final PasswordEncoder passwordEncoder;
+    private final S3Service s3Service;
 
     @Override
     @Transactional
@@ -112,5 +115,29 @@ public class UserServiceImpl implements UserService {
         return userStream
                 .map(userDtoFactory::makeUserResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public String uploadPicture(MultipartFile picture) {
+        if (picture.isEmpty()) {
+            throw new BadRequestException("Picture is empty");
+        }
+
+        if (!("image/jpeg".equals(picture.getContentType()) || "image/png".equals(picture.getContentType()))) {
+            throw new BadRequestException("Only JPEG or PNG files are supported");
+        }
+
+        User user = getUser();
+
+        String pictureName = String.format("users/%d/picture", user.getId());
+        try {
+            s3Service.uploadFile(pictureName, picture);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        user.setPhotoUrl(s3Service.getUrl() + "/" + pictureName);
+        return "Profile picture was uploaded";
     }
 }
