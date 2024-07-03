@@ -138,6 +138,8 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPhotoUrl(s3Service.getUrl() + "/" + pictureName);
+        saveUser(user);
+
         return "Profile picture was uploaded";
     }
 }
