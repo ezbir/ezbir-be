@@ -22,14 +22,14 @@ public class FundraiserController {
     @GetMapping("/{id}")
     public FundraiserResponseDto findFundraiserById(
             @PathVariable("id") Long id
-    ){
+    ) {
         return fundraiserService.getFundraiserResponseDto(id);
     }
 
     @GetMapping("/search")
     public List<FundraiserResponseDto> fetchFundraisers(
             @RequestParam("prefix_name") Optional<String> optionalPrefixName
-            ) {
+    ) {
         return fundraiserService.fetchFundraisers(optionalPrefixName);
     }
 
