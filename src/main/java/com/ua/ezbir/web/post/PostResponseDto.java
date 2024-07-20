@@ -1,4 +1,4 @@
-package com.ua.ezbir.web.fundraiser;
+package com.ua.ezbir.web.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

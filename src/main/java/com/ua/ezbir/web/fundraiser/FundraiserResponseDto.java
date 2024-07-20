@@ -1,6 +1,7 @@
 package com.ua.ezbir.web.fundraiser;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ua.ezbir.web.post.PostResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

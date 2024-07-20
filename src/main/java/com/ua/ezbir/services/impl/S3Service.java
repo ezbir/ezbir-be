@@ -1,7 +1,10 @@
 package com.ua.ezbir.services.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,4 +34,22 @@ public class S3Service {
         return s3client.getObject(bucketName, keyName);
     }
 
+    public void deleteFolder(String prefix) {
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucketName)
+                .withPrefix(prefix);
+
+        ObjectListing objectListing = s3client.listObjects(listObjectsRequest);
+
+        while (true) {
+            for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                s3client.deleteObject(bucketName, objectSummary.getKey());
+            }
+            if (objectListing.isTruncated()) {
+                objectListing = s3client.listNextBatchOfObjects(objectListing);
+            } else {
+                break;
+            }
+        }
+    }
 }

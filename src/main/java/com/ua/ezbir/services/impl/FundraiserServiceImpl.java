@@ -3,6 +3,7 @@ package com.ua.ezbir.services.impl;
 import com.ua.ezbir.domain.Fundraiser;
 import com.ua.ezbir.domain.User;
 import com.ua.ezbir.domain.exceptions.BadRequestException;
+import com.ua.ezbir.domain.exceptions.DatabaseException;
 import com.ua.ezbir.domain.exceptions.FundraiserNotFoundException;
 import com.ua.ezbir.domain.exceptions.UnauthorizedException;
 import com.ua.ezbir.factories.FundraiserDtoFactory;
@@ -44,7 +45,7 @@ public class FundraiserServiceImpl implements FundraiserService {
                 .categories(fundraiserRequestDto.getCategories())
                 .user(user)
                 .build();
-        fundraiserRepository.save(fundraiser);
+        saveFundraiser(fundraiser);
 
         // add new fundraiser in user list
         fundraiserList.add(fundraiser);
@@ -76,7 +77,7 @@ public class FundraiserServiceImpl implements FundraiserService {
         return "Fundraiser was successful deleted";
     }
 
-    private void checkFundraiserAccess(Fundraiser fundraiser, User user) {
+    public void checkFundraiserAccess(Fundraiser fundraiser, User user) {
         if (!fundraiser.getUser().getId().equals(user.getId())) {
             throw new UnauthorizedException("You don't have access to this fundraiser");
         }
@@ -105,7 +106,7 @@ public class FundraiserServiceImpl implements FundraiserService {
         optionalIsClosed.ifPresent(fundraiser::setClosed);
         optionalCategories.ifPresent(fundraiser::setCategories);
 
-        fundraiserRepository.save(fundraiser);
+        saveFundraiser(fundraiser);
 
         return fundraiserDtoFactory.makeFundraiserResponseDto(fundraiser);
     }
@@ -126,13 +127,29 @@ public class FundraiserServiceImpl implements FundraiserService {
 
     @Override
     @Transactional(readOnly = true)
-    public FundraiserResponseDto findFundraiserById(Long id) {
+    public Fundraiser findFundraiserById(Long id) {
+        return fundraiserRepository
+                .findById(id)
+                .orElseThrow(FundraiserNotFoundException::new);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FundraiserResponseDto getFundraiserResponseDto(Long id) {
         return fundraiserDtoFactory
                 .makeFundraiserResponseDto(
-                        fundraiserRepository
-                                .findById(id)
-                                .orElseThrow(FundraiserNotFoundException::new)
+                        findFundraiserById(id)
                 );
+    }
+
+    @Override
+    @Transactional
+    public Fundraiser saveFundraiser(Fundraiser fundraiser) {
+        try {
+            return fundraiserRepository.save(fundraiser);
+        } catch (Exception e) {
+            throw new DatabaseException();
+        }
     }
 
 }

@@ -15,6 +15,6 @@ public interface UserService {
     User getUser();
     List<UserResponseDto> fetchUsers(Optional<String> optionalPrefixName);
     UserResponseDto updateUser(Optional<String> description, Optional<Long> number);
-    void saveUser(User user);
+    User saveUser(User user);
     String uploadPicture(MultipartFile multipartFile);
 }

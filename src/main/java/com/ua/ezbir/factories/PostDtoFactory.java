@@ -1,7 +1,7 @@
 package com.ua.ezbir.factories;
 
 import com.ua.ezbir.domain.Post;
-import com.ua.ezbir.web.fundraiser.PostResponseDto;
+import com.ua.ezbir.web.post.PostResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component

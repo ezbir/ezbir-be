@@ -23,7 +23,7 @@ public class FundraiserController {
     public FundraiserResponseDto findFundraiserById(
             @PathVariable("id") Long id
     ){
-        return fundraiserService.findFundraiserById(id);
+        return fundraiserService.getFundraiserResponseDto(id);
     }
 
     @GetMapping("/search")

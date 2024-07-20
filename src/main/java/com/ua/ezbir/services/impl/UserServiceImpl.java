@@ -2,6 +2,7 @@ package com.ua.ezbir.services.impl;
 
 import com.ua.ezbir.domain.User;
 import com.ua.ezbir.domain.exceptions.BadRequestException;
+import com.ua.ezbir.domain.exceptions.DatabaseException;
 import com.ua.ezbir.domain.exceptions.UserNotFoundException;
 import com.ua.ezbir.factories.UserDtoFactory;
 import com.ua.ezbir.repository.UserRepository;
@@ -29,11 +30,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
-        if (user != null) {
-            userRepository.save(user);
-        } else {
-            throw new NullPointerException();
+    public User saveUser(User user) {
+        try {
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new DatabaseException();
         }
     }
 
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
                 .username(userRequestDto.getUsername())
                 .email(userRequestDto.getEmail())
                 .password(passwordEncoder.encode(userRequestDto.getPassword()))
-                .build();       // when the user verifies their email, 'enabled' will be set to true
+                .build();
 
         userRepository.save(user);
 
@@ -124,13 +125,19 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Picture is empty");
         }
 
-        if (!("image/jpeg".equals(picture.getContentType()) || "image/png".equals(picture.getContentType()))) {
-            throw new BadRequestException("Only JPEG or PNG files are supported");
+        String contentType = picture.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new BadRequestException("Not supported content type");
         }
 
         User user = getUser();
 
-        String pictureName = String.format("users/%d/picture", user.getId());
+        String pictureName = String.format(
+                "users/%d/picture.%s",
+                user.getId(),
+                contentType.substring(contentType.lastIndexOf("/") + 1)
+        );
+
         try {
             s3Service.uploadFile(pictureName, picture);
         } catch (IOException e) {
