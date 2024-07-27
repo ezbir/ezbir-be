@@ -15,7 +15,6 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/fundraisers")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class FundraiserController {
     private final FundraiserService fundraiserService;
 
