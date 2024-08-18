@@ -6,9 +6,9 @@ import com.ua.ezbir.web.fundraiser.FundraiserRequestDto;
 import com.ua.ezbir.web.fundraiser.FundraiserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,10 +26,15 @@ public class FundraiserController {
     }
 
     @GetMapping("/search")
-    public List<FundraiserResponseDto> fetchFundraisers(
-            @RequestParam("prefix_name") Optional<String> optionalPrefixName
+    public Page<FundraiserResponseDto> searchFundraisers(
+            @RequestParam(required = false, defaultValue = "") String name,
+            @RequestParam(required = false) Boolean isClosed,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir
     ) {
-        return fundraiserService.fetchFundraisers(optionalPrefixName);
+        return fundraiserService.searchFundraisers(name, isClosed, page, size, sortBy, sortDir);
     }
 
     @PostMapping("/add")

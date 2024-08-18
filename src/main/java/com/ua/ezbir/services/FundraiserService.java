@@ -5,6 +5,8 @@ import com.ua.ezbir.domain.User;
 import com.ua.ezbir.web.fundraiser.Category;
 import com.ua.ezbir.web.fundraiser.FundraiserRequestDto;
 import com.ua.ezbir.web.fundraiser.FundraiserResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +24,16 @@ public interface FundraiserService {
             Optional<Boolean> optionalIsClosed,
             Optional<Set<Category>> optionalCategories
     );
-    List<FundraiserResponseDto> fetchFundraisers(Optional<String> optionalPrefixName);
     Fundraiser findFundraiserById(Long id);
     FundraiserResponseDto getFundraiserResponseDto(Long id);
     void checkFundraiserAccess(Fundraiser fundraiser, User user);
     Fundraiser saveFundraiser(Fundraiser fundraiser);
+    Page<FundraiserResponseDto> searchFundraisers(
+            String name,
+            Boolean isClosed,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+    );
 }

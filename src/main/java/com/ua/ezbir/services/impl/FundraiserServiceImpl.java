@@ -14,14 +14,15 @@ import com.ua.ezbir.web.fundraiser.Category;
 import com.ua.ezbir.web.fundraiser.FundraiserRequestDto;
 import com.ua.ezbir.web.fundraiser.FundraiserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -112,17 +113,25 @@ public class FundraiserServiceImpl implements FundraiserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<FundraiserResponseDto> fetchFundraisers(Optional<String> optionalPrefixName) {
-        optionalPrefixName = optionalPrefixName.filter(prefixName -> !prefixName.trim().isEmpty());
+    public Page<FundraiserResponseDto> searchFundraisers(
+            String name,
+            Boolean isClosed,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir
+    ) {
+        Sort sort = Sort.by(sortBy);
+        if (sortDir.equalsIgnoreCase("asc")) {
+            sort = sort.ascending();
+        } else {
+            sort = sort.descending();
+        }
 
-        Stream<Fundraiser> fundraiserStream = optionalPrefixName
-                .map(fundraiserRepository::streamAllByNameStartsWithIgnoreCase)
-                .orElseGet(fundraiserRepository::streamAllBy);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        Page<Fundraiser> fundraisers = fundraiserRepository.searchFundraisers(name, isClosed, pageRequest);
 
-        return fundraiserStream
-                .map(fundraiserDtoFactory::makeFundraiserResponseDto)
-                .collect(Collectors.toList());
+        return fundraisers.map(fundraiserDtoFactory::makeFundraiserResponseDto);
     }
 
     @Override
